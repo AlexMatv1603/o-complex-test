@@ -25,10 +25,23 @@ class LoginAPIView(APIView):
     queryset = UserModel.objects.all()
     permission_classes = (AllowAny,)
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+    @staticmethod
+    def post(request):
+        data = request.data
+        email = data.get('email', None)
+        password = data.get('password', None)
+
+        if email is None or password is None:
+            return Response({
+                'error': 'Both email and password are required!',
+            }, status=HTTP_400_BAD_REQUEST)
+
+        user = authenticate(email=email, password=password)
+
+        if user is None:
+            return Response({
+                'error': 'Incorrect credentials!'
+            }, status=HTTP_401_UNAUTHORIZED)
 
         user_data = {
             'id': user.id,
@@ -43,7 +56,7 @@ class LoginAPIView(APIView):
         access_token.payload.update(user_data)
 
         data = {
-            'me': serializer.data,
+            'me': user.data_for_me,
             'refresh': str(refresh_token),
             'access': str(access_token),
         }
