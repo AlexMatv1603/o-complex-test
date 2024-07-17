@@ -25,8 +25,7 @@ class LoginAPIView(APIView):
     queryset = UserModel.objects.all()
     permission_classes = (AllowAny,)
 
-    @staticmethod
-    def post(request):
+    def post(self, request):
         data = request.data
         email = data.get('email', None)
         password = data.get('password', None)
@@ -37,6 +36,8 @@ class LoginAPIView(APIView):
             }, status=HTTP_400_BAD_REQUEST)
 
         user = authenticate(email=email, password=password)
+
+        serializer = self.serializer_class(user)
 
         if user is None:
             return Response({
@@ -56,7 +57,7 @@ class LoginAPIView(APIView):
         access_token.payload.update(user_data)
 
         data = {
-            'me': user.data_for_me,
+            'me': serializer.data,
             'refresh': str(refresh_token),
             'access': str(access_token),
         }
