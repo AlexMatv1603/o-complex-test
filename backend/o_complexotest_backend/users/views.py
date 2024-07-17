@@ -1,3 +1,6 @@
+import json
+
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import (AllowAny, IsAuthenticated,)
@@ -38,7 +41,7 @@ class RegistrationAPIView(APIView):
 
         if user.is_authenticated:
             return Response({
-                'me': user.data_for_me,
+                'me': serializer.data,
                 'refresh': str(refresh_token),
                 'access': str(access_token),
             }, status=HTTP_201_CREATED)
