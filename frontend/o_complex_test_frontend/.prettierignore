@@ -1,4 +1,12 @@
 **/App.tsx
+**/app/public
+
+.eslintrc
+.eslintignore
 
 .prettierrc
+.prettierignore
+
 package.json
+node_modules
+test/fixtures

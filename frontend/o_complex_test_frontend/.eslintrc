@@ -1,18 +1,19 @@
 {
-  "extends": ["react-app"],
-  "plugins": ["prettier"],
+  "extends": ["react-app", "eslint:recommended", "plugin:react/recommended"],
+  "plugins": ["react"],
   "rules": {
-    "prettier/prettier": 2,
+    "prettier/prettier": "error",
+    "react/prop-types": 0,
     "import/order": [
       2,
       {
         "groups": ["external", "builtin", "index", "sibling", "parent", "internal", "type"],
         "alphabetize": {
           "order": "asc",
-          "caseInsensitive": true
+          "caseInsensitive": true,
         },
-        "newlines-between": "always-and-inside-groups"
-      }
-    ]
-  }
+        "newlines-between": "always-and-inside-groups",
+      },
+    ],
+  },
 }
